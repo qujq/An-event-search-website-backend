@@ -6,14 +6,53 @@ const app = express();
 // var request = require("request");
 const axios = require('axios');
 const util = require('util');
+var geohash = require('ngeohash');
 
 // Search for events
 app.get('/', (req, res) => {
   console.log("req.query::::")
   console.log(req.query)
-  res.header("Access-Control-Allow-Origin","*");
-  res.send(JSON.stringify({"body": 123}));
-  console.log("send finished!")
+
+  // Get geohash code
+  console.log("***geohash: ", geohash.encode(req.query.latitude, req.query.longitude, precision=7));
+  var geohashResult = geohash.encode(req.query.latitude, req.query.longitude, precision=7)
+
+  // 
+  ticketmasterBaseUrl = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=Qf8PRg3ggae12R8TRPqlTRnJdD6EE3q3" 
+  ticketmasterBaseUrl += "&geoPoint=" + geohashResult
+  ticketmasterBaseUrl += "&radius=" + req.query.distance
+  if(req.query.category != 'All'){
+    if(req.query.category == 'Music'){
+      segmentId = 'KZFzniwnSyZfZ7v7nJ'
+    }
+    else if(req.query.category == 'Sports'){
+      segmentId = 'KZFzniwnSyZfZ7v7nE'
+    }
+    else if(req.query.category == 'ArtsTheatre'){
+      segmentId = 'KZFzniwnSyZfZ7v7na'
+    }
+    else if(req.query.category == 'Film'){
+      segmentId = 'KZFzniwnSyZfZ7v7nn'
+    }
+    else if(req.query.category == 'Miscellaneous'){
+      segmentId = 'KZFzniwnSyZfZ7v7n1'
+    }
+  }
+  ticketmasterBaseUrl += "&unit=" + req.query.distanceUnit
+  ticketmasterBaseUrl += "&keyword=" + req.query.keyword
+  console.log(ticketmasterBaseUrl)
+  axios.get(ticketmasterBaseUrl)
+  .then(response => {
+    console.log(response.data)
+    // Send feedback to front-end
+    res.header("Access-Control-Allow-Origin","*");
+    res.send(JSON.stringify(response.data))
+    console.log("send finished!")
+  })
+  .catch(error => {
+    console.log(error);
+  });
+
 });
 
 // Auto-complete
@@ -24,21 +63,16 @@ app.get('/autocomplete', (req, res) => {
   // Request ticketmaster api
   axios.get('https://app.ticketmaster.com/discovery/v2/suggest?apikey=Qf8PRg3ggae12R8TRPqlTRnJdD6EE3q3&keyword=' + req.query.keyword)
   .then(response => {
-    console.log("response from ticketmaster auto-complete");
-    console.log(response.data._embedded)
-    // console.log(util.inspect(response,{depth:2}));
+
+    // Send feedback to front-end
     res.header("Access-Control-Allow-Origin","*");
     res.send(JSON.stringify(response.data._embedded));
-    // res.send(util.inspect(response,{depth:null}));
-    console.log("send finished!")
+    console.log("Auto-complete send finished!")
   })
   .catch(error => {
     console.log(error);
   });
-  // Send feedback to front-end
-  // res.header("Access-Control-Allow-Origin","*");
-  // res.send(JSON.stringify({"body": 123456777}));
-  // console.log("send finished!")
+  
 });
 
 // Start the server
