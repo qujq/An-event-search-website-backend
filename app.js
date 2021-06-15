@@ -75,6 +75,26 @@ app.get('/autocomplete', (req, res) => {
   
 });
 
+// Search venue details
+app.get('/venueDetail', (req, res) => {
+  console.log("req.query:")
+  console.log(req.query)
+
+  // Request ticketmaster api
+  axios.get('https://app.ticketmaster.com/discovery/v2/venues.json?apikey=Qf8PRg3ggae12R8TRPqlTRnJdD6EE3q3&id=' + req.query.id)
+  .then(response => {
+
+    // Send feedback to front-end
+    res.header("Access-Control-Allow-Origin","*");
+    res.send(JSON.stringify(response.data._embedded));
+    console.log("Auto-complete send finished!")
+  })
+  .catch(error => {
+    console.log(error);
+  });
+  
+});
+
 // Start the server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
