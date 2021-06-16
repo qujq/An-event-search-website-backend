@@ -19,7 +19,9 @@
   "dependencies": {
     "axios": "^0.21.1",
     "express": "^4.17.1",
+    "ngeohash": "^0.6.3",
     "request": "^2.88.2",
+    "spotify-web-api-node": "^5.0.2",
     "util": "^0.12.4"
   },
   "devDependencies": {

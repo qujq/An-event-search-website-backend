@@ -7,6 +7,7 @@ const app = express();
 const axios = require('axios');
 const util = require('util');
 var geohash = require('ngeohash');
+var SpotifyWebApi = require('spotify-web-api-node');
 
 // Search for events
 app.get('/', (req, res) => {
@@ -72,6 +73,57 @@ app.get('/autocomplete', (req, res) => {
   .catch(error => {
     console.log(error);
   });
+  
+});
+
+// Search artists
+app.get('/spotify', (req, res) => {
+  console.log("req.query::")
+  console.log(req.query)
+
+  // Set necessary parts of the credentials on the constructor
+  var spotifyApi = new SpotifyWebApi({
+    clientId: 'cd1d239d6a7b4a71bfb5e4fb9ea1b579',
+    clientSecret: 'f76c7399e1354769b184780920f7b568'
+  });
+
+  // Get an access token and 'save' it using a setter
+  spotifyApi.clientCredentialsGrant().then(
+    function(data) {
+      console.log('The access token is ' + data.body['access_token']);
+
+      var spotifyApi = new SpotifyWebApi({
+        clientId: 'cd1d239d6a7b4a71bfb5e4fb9ea1b579',
+        clientSecret: 'f76c7399e1354769b184780920f7b568'
+      });
+      spotifyApi.setAccessToken(data.body['access_token']);
+
+      // Set the credentials when making the request
+      var spotifyApi = new SpotifyWebApi({
+        accessToken: data.body['access_token']
+      });
+
+      // Do search using the access token
+      spotifyApi.searchArtists(req.query['artist']).then(
+      // spotifyApi.searchArtists(["Maroon 5", "Blackbear"]).then(
+        function(data) {
+          console.log("artist:", data.body);
+          res.header("Access-Control-Allow-Origin","*");
+          res.send(JSON.stringify(data.body));
+          console.log("artists send finished!")
+        },
+        function(err) {
+          console.log('Something went wrong!', err);
+        }
+      );
+
+
+    },
+    function(err) {
+      console.log('Something went wrong!', err);
+    }
+  );
+
   
 });
 
