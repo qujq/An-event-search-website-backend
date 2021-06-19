@@ -25,20 +25,26 @@ app.get('/', (req, res) => {
   if(req.query.category != 'All'){
     if(req.query.category == 'Music'){
       segmentId = 'KZFzniwnSyZfZ7v7nJ'
+      ticketmasterBaseUrl += "&segmentId=" + segmentId
     }
     else if(req.query.category == 'Sports'){
       segmentId = 'KZFzniwnSyZfZ7v7nE'
+      ticketmasterBaseUrl += "&segmentId=" + segmentId
     }
     else if(req.query.category == 'ArtsTheatre'){
       segmentId = 'KZFzniwnSyZfZ7v7na'
+      ticketmasterBaseUrl += "&segmentId=" + segmentId
     }
-    else if(req.query.category == 'Film'){
+    else if(req.query.category == 'Films'){
       segmentId = 'KZFzniwnSyZfZ7v7nn'
+      ticketmasterBaseUrl += "&segmentId=" + segmentId
     }
     else if(req.query.category == 'Miscellaneous'){
       segmentId = 'KZFzniwnSyZfZ7v7n1'
+      ticketmasterBaseUrl += "&segmentId=" + segmentId
     }
   }
+  
   ticketmasterBaseUrl += "&unit=" + req.query.distanceUnit
   ticketmasterBaseUrl += "&keyword=" + req.query.keyword
   console.log(ticketmasterBaseUrl)
