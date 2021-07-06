@@ -1,4 +1,5 @@
-# CSCI 571 Courseworks (Summer 2021) hw8 back-end
+# CSCI 571 Courseworks (Summer 2021) 
+# hw8 back-end
 An event search website back-end deployed with Nodejs
 
 * [Setup](#setup)
