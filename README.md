@@ -1,9 +1,5 @@
-# Quickstart for Node.js in the App Engine standard environment
-
-This is the sample application for the
-[Quickstart for Node.js in the App Engine standard environment][tutorial]
-tutorial found in the [Google App Engine Node.js standard environment][appengine]
-documentation.
+# CSCI 571 Courseworks (Summer 2021) hw8 back-end
+An event search website back-end deployed with Nodejs
 
 * [Setup](#setup)
 * [Running locally](#running-locally)
