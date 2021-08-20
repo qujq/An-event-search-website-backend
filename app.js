@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
   }
   else{
     var location_to_search = req.query.fromLocation
-    var googleGeoApiBaseUrl = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDRm6eke0AgBCdf-4QGRrYOhktzb4y8Jos&address="
+    var googleGeoApiBaseUrl = "https://maps.googleapis.com/maps/api/geocode/json?key=API_KEY&address="
         googleGeoApiBaseUrl += location_to_search
         axios.get(googleGeoApiBaseUrl)
           .then(resGeoData => {
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
     var geohashResult = geohash.encode(req.query.latitude, req.query.longitude, precision=7)
 
     // 
-    ticketmasterBaseUrl = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=Qf8PRg3ggae12R8TRPqlTRnJdD6EE3q3&sort=date,asc" 
+    ticketmasterBaseUrl = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=TICKETMASTER_API_KEY&sort=date,asc" 
     ticketmasterBaseUrl += "&geoPoint=" + geohashResult
     ticketmasterBaseUrl += "&radius=" + req.query.distance
     if(req.query.category != 'All'){
@@ -90,7 +90,7 @@ app.get('/autocomplete', (req, res) => {
   console.log(req.query)
 
   // Request ticketmaster api
-  axios.get('https://app.ticketmaster.com/discovery/v2/suggest?apikey=Qf8PRg3ggae12R8TRPqlTRnJdD6EE3q3&keyword=' + req.query.keyword)
+  axios.get('https://app.ticketmaster.com/discovery/v2/suggest?apikey=TICKETMASTER_API_KEY&keyword=' + req.query.keyword)
   .then(response => {
 
     // Send feedback to front-end
@@ -161,7 +161,7 @@ app.get('/venueDetail', (req, res) => {
   console.log(req.query)
 
   // Request ticketmaster api
-  axios.get('https://app.ticketmaster.com/discovery/v2/venues.json?apikey=Qf8PRg3ggae12R8TRPqlTRnJdD6EE3q3&keyword=' + req.query.keyword)
+  axios.get('https://app.ticketmaster.com/discovery/v2/venues.json?apikey=TICKETMASTER_API_KEY&keyword=' + req.query.keyword)
   .then(response => {
     console.log(response)
     // Send feedback to front-end
